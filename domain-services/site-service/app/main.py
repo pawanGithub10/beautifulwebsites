@@ -8,17 +8,15 @@ This service demonstrates the plug-and-play modular architecture:
 - Horizontally scalable
 """
 
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+from sqlalchemy import text
 import logging
 
 from app.config import settings
-from app.database import engine, Base
+from app.database import engine, init_db
 from app.routers import sites, templates, sections
-from app.middleware.auth import verify_token
-from app.events.publisher import EventPublisher
-from app.integrations import CoreServicesClient
 
 # Configure logging
 logging.basicConfig(
@@ -38,14 +36,7 @@ async def lifespan(app: FastAPI):
     logger.info(f"Starting {settings.SERVICE_NAME} on port {settings.SERVICE_PORT}")
 
     # Create database tables
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-
-    # Initialize event publisher
-    await EventPublisher.initialize()
-
-    # Initialize core services client
-    await CoreServicesClient.initialize()
+    await init_db()
 
     logger.info(f"{settings.SERVICE_NAME} started successfully")
 
@@ -53,8 +44,6 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     logger.info(f"Shutting down {settings.SERVICE_NAME}")
-    await EventPublisher.close()
-    await CoreServicesClient.close()
     logger.info(f"{settings.SERVICE_NAME} stopped")
 
 
@@ -92,17 +81,12 @@ async def readiness_check():
     try:
         # Check database connection
         async with engine.connect() as conn:
-            await conn.execute("SELECT 1")
-
-        # Check event bus
-        if not EventPublisher.is_ready():
-            raise Exception("Event bus not ready")
+            await conn.execute(text("SELECT 1"))
 
         return {
             "service": settings.SERVICE_NAME,
             "status": "ready",
-            "database": "connected",
-            "event_bus": "connected"
+            "database": "connected"
         }
     except Exception as e:
         logger.error(f"Readiness check failed: {e}")
@@ -111,26 +95,24 @@ async def readiness_check():
             detail=f"Service not ready: {str(e)}"
         )
 
-# Include routers (all routes require authentication)
+# Include routers
+# Note: Authentication can be added per-route or here as a dependency
 app.include_router(
     sites.router,
     prefix="/v1/sites",
-    tags=["Sites"],
-    dependencies=[Depends(verify_token)]
+    tags=["Sites"]
 )
 
 app.include_router(
     templates.router,
     prefix="/v1/templates",
-    tags=["Templates"],
-    dependencies=[Depends(verify_token)]
+    tags=["Templates"]
 )
 
 app.include_router(
     sections.router,
     prefix="/v1/sites",
-    tags=["Sections"],
-    dependencies=[Depends(verify_token)]
+    tags=["Sections"]
 )
 
 # Root endpoint
