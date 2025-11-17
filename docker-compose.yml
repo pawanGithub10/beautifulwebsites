@@ -1,0 +1,261 @@
+# Multi-Website Platform - Domain Services
+# This compose file runs all domain services + supporting infrastructure
+
+version: '3.9'
+
+services:
+  # ===================
+  # INFRASTRUCTURE
+  # ===================
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: platform_user
+      POSTGRES_PASSWORD: platform_pass
+      POSTGRES_MULTIPLE_DATABASES: site_service_db,storefront_service_db,booking_service_db,lead_service_db,content_service_db,widget_service_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init-multiple-dbs.sh:/docker-entrypoint-initdb.d/init-multiple-dbs.sh
+    networks:
+      - platform_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U platform_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - platform_network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Event Bus (RabbitMQ - for production; Redis Streams for MVP)
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"   # AMQP port
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: platform
+      RABBITMQ_DEFAULT_PASS: platform123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - platform_network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ===================
+  # DOMAIN SERVICES
+  # ===================
+
+  site-service:
+    build:
+      context: ./domain-services/site-service
+      dockerfile: Dockerfile
+    ports:
+      - "8010:8010"
+    environment:
+      - SERVICE_NAME=site-service
+      - SERVICE_PORT=8010
+      - DATABASE_URL=postgresql://platform_user:platform_pass@postgres:5432/site_service_db
+      - REDIS_URL=redis://redis:6379/0
+      - EVENT_BUS_URL=redis://redis:6379/1
+      - AUTH_SERVICE_URL=http://core_services:8000
+      - USER_SERVICE_URL=http://core_services:8001
+      - BILLING_SERVICE_URL=http://core_services:8002
+      - LLM_GATEWAY_URL=http://core_services:8003
+      - LOGGING_SERVICE_URL=http://core_services:8005
+      - LOG_LEVEL=INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - platform_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8010/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  storefront-service:
+    build:
+      context: ./domain-services/storefront-service
+      dockerfile: Dockerfile
+    ports:
+      - "8011:8011"
+    environment:
+      - SERVICE_NAME=storefront-service
+      - SERVICE_PORT=8011
+      - DATABASE_URL=postgresql://platform_user:platform_pass@postgres:5432/storefront_service_db
+      - REDIS_URL=redis://redis:6379/0
+      - EVENT_BUS_URL=redis://redis:6379/1
+      - AUTH_SERVICE_URL=http://core_services:8000
+      - USER_SERVICE_URL=http://core_services:8001
+      - BILLING_SERVICE_URL=http://core_services:8002
+      - NOTIFICATION_SERVICE_URL=http://core_services:8004
+      - LOGGING_SERVICE_URL=http://core_services:8005
+      - LOG_LEVEL=INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - platform_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8011/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  booking-service:
+    build:
+      context: ./domain-services/booking-service
+      dockerfile: Dockerfile
+    ports:
+      - "8012:8012"
+    environment:
+      - SERVICE_NAME=booking-service
+      - SERVICE_PORT=8012
+      - DATABASE_URL=postgresql://platform_user:platform_pass@postgres:5432/booking_service_db
+      - REDIS_URL=redis://redis:6379/0
+      - EVENT_BUS_URL=redis://redis:6379/1
+      - AUTH_SERVICE_URL=http://core_services:8000
+      - NOTIFICATION_SERVICE_URL=http://core_services:8004
+      - LOGGING_SERVICE_URL=http://core_services:8005
+      - LOG_LEVEL=INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - platform_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8012/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  lead-service:
+    build:
+      context: ./domain-services/lead-service
+      dockerfile: Dockerfile
+    ports:
+      - "8013:8013"
+    environment:
+      - SERVICE_NAME=lead-service
+      - SERVICE_PORT=8013
+      - DATABASE_URL=postgresql://platform_user:platform_pass@postgres:5432/lead_service_db
+      - REDIS_URL=redis://redis:6379/0
+      - EVENT_BUS_URL=redis://redis:6379/1
+      - AUTH_SERVICE_URL=http://core_services:8000
+      - NOTIFICATION_SERVICE_URL=http://core_services:8004
+      - LLM_GATEWAY_URL=http://core_services:8003
+      - LOGGING_SERVICE_URL=http://core_services:8005
+      - LOG_LEVEL=INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - platform_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8013/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  content-service:
+    build:
+      context: ./domain-services/content-service
+      dockerfile: Dockerfile
+    ports:
+      - "8014:8014"
+    environment:
+      - SERVICE_NAME=content-service
+      - SERVICE_PORT=8014
+      - DATABASE_URL=postgresql://platform_user:platform_pass@postgres:5432/content_service_db
+      - REDIS_URL=redis://redis:6379/0
+      - EVENT_BUS_URL=redis://redis:6379/1
+      - AUTH_SERVICE_URL=http://core_services:8000
+      - LLM_GATEWAY_URL=http://core_services:8003
+      - LOGGING_SERVICE_URL=http://core_services:8005
+      - LOG_LEVEL=INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - platform_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8014/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  widget-service:
+    build:
+      context: ./domain-services/widget-service
+      dockerfile: Dockerfile
+    ports:
+      - "8015:8015"
+    environment:
+      - SERVICE_NAME=widget-service
+      - SERVICE_PORT=8015
+      - DATABASE_URL=postgresql://platform_user:platform_pass@postgres:5432/widget_service_db
+      - REDIS_URL=redis://redis:6379/0
+      - EVENT_BUS_URL=redis://redis:6379/1
+      - AUTH_SERVICE_URL=http://core_services:8000
+      - LLM_GATEWAY_URL=http://core_services:8003
+      - NOTIFICATION_SERVICE_URL=http://core_services:8004
+      - LOGGING_SERVICE_URL=http://core_services:8005
+      - LOG_LEVEL=INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - platform_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8015/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  platform_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
