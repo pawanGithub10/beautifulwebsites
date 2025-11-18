@@ -81,6 +81,28 @@ async def readiness_check():
         logger.error(f"Readiness check failed: {e}")
         raise
 
+# Import routers
+from app.routers import products, cart, orders
+
+# Register routers
+app.include_router(
+    products.router,
+    prefix="/api/v1/catalog",
+    tags=["Products & Categories"]
+)
+
+app.include_router(
+    cart.router,
+    prefix="/api/v1",
+    tags=["Shopping Cart"]
+)
+
+app.include_router(
+    orders.router,
+    prefix="/api/v1",
+    tags=["Orders"]
+)
+
 # Root endpoint
 @app.get("/")
 async def root():
@@ -98,7 +120,15 @@ async def root():
             "Inventory tracking",
             "Stock history",
             "Multi-site support"
-        ]
+        ],
+        "endpoints": {
+            "catalog": "/api/v1/catalog/{site_id}/...",
+            "cart": "/api/v1/{site_id}/cart",
+            "orders": "/api/v1/{site_id}/orders",
+            "docs": "/docs",
+            "health": "/health",
+            "ready": "/ready"
+        }
     }
 
 

@@ -43,6 +43,19 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
             await session.close()
 
 
+async def get_db_direct() -> AsyncGenerator[AsyncSession, None]:
+    """
+    Direct database session (for scripts)
+
+    Does not auto-commit - caller must commit explicitly
+    """
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+        finally:
+            await session.close()
+
+
 async def init_db():
     """Initialize database - create all tables"""
     async with engine.begin() as conn:
