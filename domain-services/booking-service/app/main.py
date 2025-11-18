@@ -58,6 +58,35 @@ app.add_middleware(
 )
 
 
+# Import routers
+from app.routers import services, providers, availability, bookings
+
+# Register routers
+app.include_router(
+    services.router,
+    prefix="/api/v1",
+    tags=["Services & Categories"]
+)
+
+app.include_router(
+    providers.router,
+    prefix="/api/v1",
+    tags=["Providers & Schedules"]
+)
+
+app.include_router(
+    availability.router,
+    prefix="/api/v1",
+    tags=["Availability"]
+)
+
+app.include_router(
+    bookings.router,
+    prefix="/api/v1",
+    tags=["Bookings"]
+)
+
+
 # Health check endpoints
 @app.get("/health")
 async def health_check():
