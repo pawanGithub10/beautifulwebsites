@@ -251,6 +251,39 @@ services:
       timeout: 10s
       retries: 3
 
+  # ===================
+  # FRONTEND
+  # ===================
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_GATEWAY_URL=http://localhost
+      - NEXT_PUBLIC_SITE_SERVICE_URL=http://localhost:8010
+      - NEXT_PUBLIC_STOREFRONT_SERVICE_URL=http://localhost:8011
+      - NEXT_PUBLIC_BOOKING_SERVICE_URL=http://localhost:8012
+      - NEXT_PUBLIC_LEAD_SERVICE_URL=http://localhost:8013
+      - NEXT_PUBLIC_CONTENT_SERVICE_URL=http://localhost:8014
+      - NEXT_PUBLIC_WIDGET_SERVICE_URL=http://localhost:8015
+      - NEXT_PUBLIC_AUTH_SERVICE_URL=http://localhost:8000
+    depends_on:
+      - site-service
+      - storefront-service
+      - booking-service
+    networks:
+      - platform_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 networks:
   platform_network:
     driver: bridge
