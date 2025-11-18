@@ -1,0 +1,323 @@
+<mxfile host="app.diagrams.net" modified="2024-01-15T10:00:00.000Z" agent="5.0" version="22.1.0" etag="draw.io" type="device">
+  <diagram name="Multi-Website Platform Architecture" id="architecture">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title" value="Multi-Website Platform - Microservices Architecture v2.0" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="560" y="20" width="800" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Client Layer -->
+        <mxCell id="client-layer" value="Client Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="1760" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="web-app" value="Web Application&lt;br&gt;(Next.js)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="200" y="120" width="180" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="mobile-ios" value="Mobile App (iOS)&lt;br&gt;(React Native)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="440" y="120" width="180" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="mobile-android" value="Mobile App (Android)&lt;br&gt;(React Native)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="680" y="120" width="180" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="admin-panel" value="Admin Panel&lt;br&gt;(React)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="920" y="120" width="180" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- API Gateway -->
+        <mxCell id="api-gateway-layer" value="API Gateway Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="1760" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="api-gateway" value="API Gateway&lt;br&gt;(Kong / NGINX)&lt;br&gt;Port 80/443" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="270" width="240" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="load-balancer" value="Load Balancer&lt;br&gt;(Kubernetes Ingress)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="720" y="270" width="240" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Core Services Layer -->
+        <mxCell id="core-services-layer" value="Core Services (Port 8000-8003)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="380" width="860" height="260" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="auth-service" value="Auth Service&lt;br&gt;Port 8000&lt;br&gt;&lt;br&gt;• JWT Auth&lt;br&gt;• 2FA&lt;br&gt;• OAuth&lt;br&gt;• RBAC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;" vertex="1" parent="1">
+          <mxGeometry x="120" y="420" width="180" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="user-service" value="User Service&lt;br&gt;Port 8001&lt;br&gt;&lt;br&gt;• Profiles&lt;br&gt;• Addresses&lt;br&gt;• Preferences&lt;br&gt;• Verification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;" vertex="1" parent="1">
+          <mxGeometry x="340" y="420" width="180" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="billing-service" value="Billing Service&lt;br&gt;Port 8002&lt;br&gt;&lt;br&gt;• Subscriptions&lt;br&gt;• Payments&lt;br&gt;• Invoices&lt;br&gt;• Stripe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;" vertex="1" parent="1">
+          <mxGeometry x="560" y="420" width="180" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="notification-service" value="Notification Service&lt;br&gt;Port 8003&lt;br&gt;&lt;br&gt;• Email (SMTP)&lt;br&gt;• SMS (Twilio)&lt;br&gt;• Push (Firebase)&lt;br&gt;• In-App" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;" vertex="1" parent="1">
+          <mxGeometry x="780" y="420" width="180" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- Domain Services Layer -->
+        <mxCell id="domain-services-layer" value="Domain Services (Port 8010-8020)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="980" y="380" width="860" height="260" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="site-service" value="Site Service&lt;br&gt;Port 8010&lt;br&gt;&lt;br&gt;• Multi-tenant&lt;br&gt;• Domains&lt;br&gt;• Themes&lt;br&gt;• Settings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="420" width="160" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="storefront-service" value="Storefront Service&lt;br&gt;Port 8011&lt;br&gt;&lt;br&gt;• Products&lt;br&gt;• Cart&lt;br&gt;• Orders&lt;br&gt;• Inventory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="420" width="160" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="booking-service" value="Booking Service&lt;br&gt;Port 8012&lt;br&gt;&lt;br&gt;• Services&lt;br&gt;• Appointments&lt;br&gt;• Calendar&lt;br&gt;• Staff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="420" width="160" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="hotel-service" value="Hotel Service&lt;br&gt;Port 8017&lt;br&gt;&lt;br&gt;• Rooms&lt;br&gt;• Reservations&lt;br&gt;• Housekeeping&lt;br&gt;• Check-in/out" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="420" width="160" height="200" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="content-service" value="Content Service&lt;br&gt;Port 8013&lt;br&gt;&lt;br&gt;• Pages&lt;br&gt;• Posts&lt;br&gt;• Media&lt;br&gt;• SEO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="640" width="160" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="lead-service" value="Lead Service&lt;br&gt;Port 8014&lt;br&gt;&lt;br&gt;• Forms&lt;br&gt;• Leads&lt;br&gt;• CRM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="640" width="160" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="widget-service" value="Widget Service&lt;br&gt;Port 8015&lt;br&gt;&lt;br&gt;• Widgets&lt;br&gt;• Components&lt;br&gt;• Layouts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="640" width="160" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Infrastructure Layer -->
+        <mxCell id="infra-layer" value="Infrastructure &amp; Data Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="780" width="1760" height="180" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="postgres-core" value="PostgreSQL&lt;br&gt;(Core Services DBs)&lt;br&gt;&lt;br&gt;• auth_db&lt;br&gt;• user_db&lt;br&gt;• billing_db&lt;br&gt;• notification_db" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="120" y="820" width="180" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="postgres-domain" value="PostgreSQL&lt;br&gt;(Domain Services DBs)&lt;br&gt;&lt;br&gt;• site_db&lt;br&gt;• storefront_db&lt;br&gt;• booking_db&lt;br&gt;• hotel_db&lt;br&gt;• content_db&lt;br&gt;• lead_db&lt;br&gt;• widget_db" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="340" y="820" width="180" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="redis" value="Redis&lt;br&gt;&lt;br&gt;• Cache&lt;br&gt;• Sessions&lt;br&gt;• Rate Limiting&lt;br&gt;• Pub/Sub" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="820" width="160" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="temporal" value="Temporal&lt;br&gt;&lt;br&gt;• Workflows&lt;br&gt;• Orchestration&lt;br&gt;• Sagas&lt;br&gt;• Scheduling" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="760" y="820" width="160" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="kafka" value="Apache Kafka&lt;br&gt;&lt;br&gt;• Event Streaming&lt;br&gt;• Message Queue&lt;br&gt;• Event Sourcing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="960" y="820" width="160" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="s3" value="AWS S3&lt;br&gt;&lt;br&gt;• Avatars&lt;br&gt;• Documents&lt;br&gt;• Media Files&lt;br&gt;• Uploads" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="820" width="160" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="elasticsearch" value="Elasticsearch&lt;br&gt;&lt;br&gt;• Search&lt;br&gt;• Analytics&lt;br&gt;• Logs" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="820" width="160" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="prometheus" value="Prometheus +&lt;br&gt;Grafana&lt;br&gt;&lt;br&gt;• Monitoring&lt;br&gt;• Metrics&lt;br&gt;• Alerting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="820" width="160" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- External Services Layer -->
+        <mxCell id="external-layer" value="External Services &amp; Integrations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=14;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1000" width="1760" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="stripe" value="Stripe&lt;br&gt;(Payments)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="140" y="1050" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="twilio" value="Twilio&lt;br&gt;(SMS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="320" y="1050" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="sendgrid" value="SendGrid&lt;br&gt;(Email)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="500" y="1050" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="firebase" value="Firebase&lt;br&gt;(Push Notifications)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1050" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="oauth-google" value="Google OAuth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="860" y="1050" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="oauth-facebook" value="Facebook OAuth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="1050" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="aws-services" value="AWS Services&lt;br&gt;(S3, CloudFront, Route53)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="1050" width="180" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="kubernetes" value="Kubernetes&lt;br&gt;(Orchestration, HPA)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="1050" width="180" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrows from clients to API Gateway -->
+        <mxCell id="arrow1" edge="1" parent="1" source="web-app" target="api-gateway">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow2" edge="1" parent="1" source="mobile-ios" target="api-gateway">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow3" edge="1" parent="1" source="mobile-android" target="api-gateway">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow4" edge="1" parent="1" source="admin-panel" target="load-balancer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrows from API Gateway to Core Services -->
+        <mxCell id="arrow5" edge="1" parent="1" source="api-gateway" target="auth-service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow6" edge="1" parent="1" source="api-gateway" target="user-service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow7" edge="1" parent="1" source="api-gateway" target="billing-service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow8" edge="1" parent="1" source="api-gateway" target="notification-service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrows from Load Balancer to Domain Services -->
+        <mxCell id="arrow9" edge="1" parent="1" source="load-balancer" target="site-service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow10" edge="1" parent="1" source="load-balancer" target="storefront-service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow11" edge="1" parent="1" source="load-balancer" target="booking-service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow12" edge="1" parent="1" source="load-balancer" target="hotel-service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrows from Core Services to Databases -->
+        <mxCell id="arrow13" edge="1" parent="1" source="auth-service" target="postgres-core" style="strokeWidth=2;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow14" edge="1" parent="1" source="user-service" target="postgres-core" style="strokeWidth=2;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow15" edge="1" parent="1" source="billing-service" target="postgres-core" style="strokeWidth=2;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow16" edge="1" parent="1" source="notification-service" target="postgres-core" style="strokeWidth=2;strokeColor=#6c8ebf;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrows from Domain Services to Databases -->
+        <mxCell id="arrow17" edge="1" parent="1" source="site-service" target="postgres-domain" style="strokeWidth=2;strokeColor=#b85450;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow18" edge="1" parent="1" source="storefront-service" target="postgres-domain" style="strokeWidth=2;strokeColor=#b85450;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow19" edge="1" parent="1" source="booking-service" target="postgres-domain" style="strokeWidth=2;strokeColor=#b85450;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow20" edge="1" parent="1" source="hotel-service" target="postgres-domain" style="strokeWidth=2;strokeColor=#b85450;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Redis connections -->
+        <mxCell id="arrow21" edge="1" parent="1" source="auth-service" target="redis" style="strokeWidth=1;strokeColor=#d6b656;dashed=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow22" edge="1" parent="1" source="user-service" target="redis" style="strokeWidth=1;strokeColor=#d6b656;dashed=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- S3 connection -->
+        <mxCell id="arrow23" edge="1" parent="1" source="user-service" target="s3" style="strokeWidth=1;strokeColor=#82b366;dashed=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- External service connections -->
+        <mxCell id="arrow24" edge="1" parent="1" source="billing-service" target="stripe" style="strokeWidth=1;strokeColor=#666666;dashed=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow25" edge="1" parent="1" source="notification-service" target="twilio" style="strokeWidth=1;strokeColor=#666666;dashed=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow26" edge="1" parent="1" source="notification-service" target="sendgrid" style="strokeWidth=1;strokeColor=#666666;dashed=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow27" edge="1" parent="1" source="notification-service" target="firebase" style="strokeWidth=1;strokeColor=#666666;dashed=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow28" edge="1" parent="1" source="auth-service" target="oauth-google" style="strokeWidth=1;strokeColor=#666666;dashed=1;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-box" value="Legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1660" y="80" width="180" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend1" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#6c8ebf;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1680" y="120" as="sourcePoint"/>
+            <mxPoint x="1750" y="120" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend1-text" value="Database" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="1760" y="110" width="70" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend2" value="" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#666666;dashed=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1680" y="145" as="sourcePoint"/>
+            <mxPoint x="1750" y="145" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend2-text" value="External API" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="1760" y="135" width="70" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend3" value="" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#000000;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1680" y="170" as="sourcePoint"/>
+            <mxPoint x="1750" y="170" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend3-text" value="HTTP/REST" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="1760" y="160" width="70" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend4" value="" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#d79b00;dashed=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1680" y="195" as="sourcePoint"/>
+            <mxPoint x="1750" y="195" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend4-text" value="Event/Queue" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="1760" y="185" width="70" height="20" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
