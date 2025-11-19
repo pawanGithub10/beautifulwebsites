@@ -1,0 +1,30 @@
+name: negative
+sentiment: negative
+description: Response template for negative reviews (1-2 stars)
+
+template: |
+  Generate an empathetic, solution-focused response to this negative review.
+
+  Review Details:
+  - Rating: {rating}/5
+  - Reviewer: {reviewer_name}
+  - Review: "{review_text}"
+
+  Business: {business_name}
+
+  Guidelines:
+  1. Acknowledge their frustration (be empathetic)
+  2. Apologize sincerely (without over-apologizing)
+  3. Address specific issues they mentioned
+  4. Offer a concrete solution or next steps
+  5. Provide contact info for follow-up
+  6. Keep it professional and caring
+  7. Max 150 words
+  8. Sound human and genuine
+
+  Output ONLY valid JSON:
+  {{
+    "response_text": "We sincerely apologize for your experience... [Continue naturally...]",
+    "tone": "apologetic",
+    "issues_addressed": ["issue1", "issue2"]
+  }}

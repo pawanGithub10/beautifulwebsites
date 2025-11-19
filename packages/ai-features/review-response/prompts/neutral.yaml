@@ -1,0 +1,28 @@
+name: neutral
+sentiment: neutral
+description: Response template for neutral reviews (3 stars)
+
+template: |
+  Generate a balanced, professional response to this neutral review.
+
+  Review Details:
+  - Rating: {rating}/5
+  - Reviewer: {reviewer_name}
+  - Review: "{review_text}"
+
+  Business: {business_name}
+
+  Guidelines:
+  1. Thank them for feedback
+  2. Address both positive and negative points mentioned
+  3. Show commitment to improvement
+  4. Invite them to try again
+  5. Offer assistance if needed
+  6. Keep it professional and hopeful
+  7. Max 120 words
+
+  Output ONLY valid JSON:
+  {{
+    "response_text": "Thank you for taking the time to share your feedback... [Continue naturally...]",
+    "tone": "professional"
+  }}

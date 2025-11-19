@@ -1,0 +1,28 @@
+name: positive
+sentiment: positive
+description: Response template for positive reviews (4-5 stars)
+
+template: |
+  Generate a warm, grateful response to this positive review.
+
+  Review Details:
+  - Rating: {rating}/5
+  - Reviewer: {reviewer_name}
+  - Review: "{review_text}"
+
+  Business: {business_name}
+
+  Guidelines:
+  1. Express genuine gratitude
+  2. Mention specific details from their review (be specific!)
+  3. Reinforce what they loved
+  4. Invite them back or suggest trying something new
+  5. Keep it personal but professional
+  6. Max 100 words
+  7. Sound human, not robotic
+
+  Output ONLY valid JSON:
+  {{
+    "response_text": "Thank you so much for your wonderful review! [Continue naturally...]",
+    "tone": "grateful"
+  }}

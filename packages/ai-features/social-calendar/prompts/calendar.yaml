@@ -1,0 +1,53 @@
+name: calendar
+description: Generate monthly social media content calendar
+
+template: |
+  Generate a {posts_count}-post social media content calendar for {month}.
+
+  Business Context:
+  - Type: {business_type}
+  - Brand Voice: {brand_voice}
+  - Target Audience: {target_audience}
+  - Key Themes: {key_themes}
+
+  Content Mix (IMPORTANT - Follow this ratio):
+  - 40% Promotional (products, offers, sales, announcements)
+  - 30% Educational (tips, how-tos, industry insights, tutorials)
+  - 20% Engagement (questions, polls, behind-the-scenes, user content)
+  - 10% Testimonial (reviews, success stories, customer spotlights)
+
+  Requirements:
+  1. Create exactly {posts_count} posts
+  2. Distribute posts evenly throughout {month}
+  3. Follow the content mix percentages above
+  4. Vary posting times (morning 9am, lunch 12pm, afternoon 3pm, evening 6pm, night 8pm)
+  5. Make content engaging, actionable, and on-brand
+  6. Include seasonal/trending topics for {month}
+
+  Each post MUST have:
+  - date: "YYYY-MM-DD"
+  - time: "HH:MM" (24-hour format)
+  - post_text: engaging caption (150-200 characters)
+  - hashtags: array of 3-5 relevant hashtags
+  - image_prompt: description for image generation
+  - category: "promotional" or "educational" or "engagement" or "testimonial"
+
+  Output ONLY valid JSON array (no markdown, no extra text):
+  [
+    {{
+      "date": "2025-02-01",
+      "time": "09:00",
+      "post_text": "Start your February right with our special offer! 💇‍♀️",
+      "hashtags": ["#FebruarySpecial", "#SalonLife", "#BeautyDeals"],
+      "image_prompt": "Modern salon interior with Valentine's decorations",
+      "category": "promotional"
+    }},
+    {{
+      "date": "2025-02-03",
+      "time": "15:00",
+      "post_text": "Tip: Did you know that regular trims keep your hair healthier? ✨",
+      "hashtags": ["#HairCareTips", "#BeautyTips", "#HealthyHair"],
+      "image_prompt": "Before and after healthy hair transformation",
+      "category": "educational"
+    }}
+  ]
