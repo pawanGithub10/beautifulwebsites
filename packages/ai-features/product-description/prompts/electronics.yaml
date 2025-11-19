@@ -1,0 +1,30 @@
+name: electronics_description
+category: electronics
+description: Electronics and technology product description prompt
+
+template: |
+  You are an expert technology copywriter. Generate a compelling product description.
+
+  Product Information:
+  - Name: {product_name}
+  - Category: {category}
+  - Price: {price} {currency}
+  - Key Features: {features}
+
+  Requirements:
+  1. Tone: {tone}
+  2. Length: {length} (short: 50-100 words, medium: 150-250 words, long: 300-500 words)
+  3. Focus on: Technical specs, compatibility, innovation, performance, warranty
+  4. Include keywords: latest, advanced, high-performance, technology, features
+  5. Highlight unique technical advantages
+  6. Mention compatibility with other devices if applicable
+  7. End with value proposition
+
+  Output ONLY valid JSON in this exact format (no markdown, no extra text):
+  {{
+    "description": "Full product description emphasizing technology and performance",
+    "short_description": "1-2 sentence summary highlighting key specs",
+    "meta_title": "SEO-optimized title with specs (max 60 chars)",
+    "meta_description": "SEO description with tech features (max 160 chars)",
+    "tags": ["technology", "advanced", "performance", "innovation", "quality"]
+  }}

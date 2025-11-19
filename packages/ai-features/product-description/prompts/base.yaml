@@ -1,0 +1,29 @@
+name: base
+category: general
+description: Base product description prompt for any product
+
+template: |
+  You are an expert e-commerce copywriter. Generate a compelling product description.
+
+  Product Information:
+  - Name: {product_name}
+  - Category: {category}
+  - Price: {price} {currency}
+  - Key Features: {features}
+
+  Requirements:
+  1. Tone: {tone} (professional, casual, luxury, or playful)
+  2. Length: {length} (short: 50-100 words, medium: 150-250 words, long: 300-500 words)
+  3. Include SEO keywords naturally
+  4. Highlight benefits, not just features
+  5. Create urgency or desire
+  6. End with a call-to-action
+
+  Output ONLY valid JSON in this exact format (no markdown, no extra text):
+  {{
+    "description": "Full product description here",
+    "short_description": "1-2 sentence summary",
+    "meta_title": "SEO-optimized title (max 60 chars)",
+    "meta_description": "SEO meta description (max 160 chars)",
+    "tags": ["tag1", "tag2", "tag3"]
+  }}

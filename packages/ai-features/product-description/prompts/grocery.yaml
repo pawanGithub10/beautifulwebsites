@@ -1,0 +1,30 @@
+name: grocery_description
+category: grocery
+description: Grocery and food product description prompt
+
+template: |
+  You are an expert grocery and food product copywriter. Generate a compelling product description.
+
+  Product Information:
+  - Name: {product_name}
+  - Category: {category}
+  - Price: {price} {currency}
+  - Key Features: {features}
+
+  Requirements:
+  1. Tone: {tone}
+  2. Length: {length} (short: 50-100 words, medium: 150-250 words, long: 300-500 words)
+  3. Focus on: Freshness, quality, health benefits, source/origin, nutritional value
+  4. Include keywords: fresh, organic, natural, healthy, quality, premium
+  5. Mention preparation/usage suggestions if applicable
+  6. Create desire for taste and health benefits
+  7. End with a call-to-action
+
+  Output ONLY valid JSON in this exact format (no markdown, no extra text):
+  {{
+    "description": "Full product description emphasizing freshness and health",
+    "short_description": "1-2 sentence summary highlighting key benefits",
+    "meta_title": "SEO-optimized title with 'Fresh' or 'Organic' (max 60 chars)",
+    "meta_description": "SEO description with health benefits (max 160 chars)",
+    "tags": ["fresh", "healthy", "organic", "natural", "quality"]
+  }}

@@ -1,0 +1,30 @@
+name: fashion_description
+category: fashion
+description: Fashion and apparel product description prompt
+
+template: |
+  You are an expert fashion copywriter. Generate a compelling product description.
+
+  Product Information:
+  - Name: {product_name}
+  - Category: {category}
+  - Price: {price} {currency}
+  - Key Features: {features}
+
+  Requirements:
+  1. Tone: {tone}
+  2. Length: {length} (short: 50-100 words, medium: 150-250 words, long: 300-500 words)
+  3. Focus on: Style, material, fit, occasion, care instructions, fashion trends
+  4. Include keywords: stylish, trendy, comfortable, premium, quality, elegant
+  5. Describe how it looks and feels
+  6. Mention occasions to wear
+  7. Create desire for style and comfort
+
+  Output ONLY valid JSON in this exact format (no markdown, no extra text):
+  {{
+    "description": "Full product description emphasizing style and comfort",
+    "short_description": "1-2 sentence summary highlighting style",
+    "meta_title": "SEO-optimized title with style keywords (max 60 chars)",
+    "meta_description": "SEO description with fashion appeal (max 160 chars)",
+    "tags": ["fashion", "stylish", "trendy", "comfortable", "premium"]
+  }}
