@@ -1,0 +1,388 @@
+# AI Features - System Architecture Diagram
+
+## High-Level Overview
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              BEAUTIFUL WEBSITES PLATFORM                                │
+│                          + 3 AI-Powered Microsaas Features                              │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+
+                                    ┌─────────────┐
+                                    │   Clients   │
+                                    │  Web/Mobile │
+                                    └──────┬──────┘
+                                           │
+                    ┌──────────────────────┼──────────────────────┐
+                    │                      │                      │
+                    ▼                      ▼                      ▼
+         ┏━━━━━━━━━━━━━━━━━┓   ┏━━━━━━━━━━━━━━━━━┓   ┏━━━━━━━━━━━━━━━━━┓
+         ┃  STOREFRONT     ┃   ┃  REVIEW         ┃   ┃  CONTENT        ┃
+         ┃  SERVICE        ┃   ┃  SERVICE        ┃   ┃  SERVICE        ┃
+         ┃  (Port 8011)    ┃   ┃  (Port 8016)    ┃   ┃  (Port 8014)    ┃
+         ┗━━━━━━━━┳━━━━━━━━┛   ┗━━━━━━━━┳━━━━━━━━┛   ┗━━━━━━━━┳━━━━━━━━┛
+                  │                     │                     │
+         ┌────────┴────────┐   ┌────────┴────────┐   ┌────────┴────────┐
+         │ 🤖 AI FEATURE 1 │   │ 🤖 AI FEATURE 2 │   │ 🤖 AI FEATURE 3 │
+         │                 │   │                 │   │                 │
+         │   Product       │   │   Review        │   │   Social        │
+         │   Description   │   │   Responder     │   │   Calendar      │
+         │   Generator     │   │                 │   │   Generator     │
+         └────────┬────────┘   └────────┬────────┘   └────────┬────────┘
+                  │                     │                     │
+                  └─────────────────────┼─────────────────────┘
+                                        │
+                                        ▼
+                         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+                         ┃    LLM GATEWAY SERVICE   ┃
+                         ┃      (Port 8004)         ┃
+                         ┃                          ┃
+                         ┃  • OpenAI GPT-4 API     ┃
+                         ┃  • Anthropic Claude API ┃
+                         ┃  • Prompt Management    ┃
+                         ┃  • Token Tracking       ┃
+                         ┃  • Response Caching     ┃
+                         ┗━━━━━━━━━━┳━━━━━━━━━━━━━━━┛
+                                    │
+                    ┌───────────────┼───────────────┐
+                    ▼               ▼               ▼
+            ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+            │ PostgreSQL   │ │    Redis     │ │  External    │
+            │              │ │              │ │  APIs        │
+            │ • Products   │ │ • Cache      │ │              │
+            │ • Reviews    │ │ • Queue      │ │ • Google     │
+            │ • Posts      │ │ • Sessions   │ │ • Yelp       │
+            │ • AI Data    │ │              │ │ • Facebook   │
+            └──────────────┘ └──────────────┘ └──────────────┘
+```
+
+## Feature #1: AI Product Description Generator
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    AI PRODUCT DESCRIPTION GENERATOR                         │
+│                         (Storefront Service - 8011)                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    INPUT                    PROCESSING                    OUTPUT
+    ─────                    ──────────                    ──────
+
+┌──────────────┐        ┌────────────────┐         ┌────────────────┐
+│  Product     │        │  AI Prompt     │         │  Generated     │
+│  Attributes  │───────▶│  Template      │────────▶│  Description   │
+│              │        │                │         │                │
+│ • Name       │        │ • Category-    │         │ • Full text    │
+│ • Category   │        │   specific     │         │ • Short desc   │
+│ • Price      │        │ • Tone         │         │ • SEO meta     │
+│ • Features   │        │ • Length       │         │ • Tags         │
+│ • Tags       │        │ • SEO focus    │         │                │
+└──────────────┘        └────────┬───────┘         └────────────────┘
+                                 │
+                        ┌────────▼────────┐
+                        │  LLM Gateway    │
+                        │  GPT-4 / Claude │
+                        │                 │
+                        │  Tokens: ~400   │
+                        │  Time: ~1-2s    │
+                        └─────────────────┘
+
+DATABASE TABLES:
+• ai_generated_descriptions (tracks all versions)
+• ai_prompt_templates (category-specific prompts)
+• ai_token_usage (billing & analytics)
+
+KEY FEATURES:
+✓ Batch generation for multiple products
+✓ A/B testing with multiple description versions
+✓ Performance tracking (views, conversions)
+✓ Cost tracking per generation
+✓ Template customization per category
+```
+
+## Feature #2: AI Customer Review Responder
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    AI CUSTOMER REVIEW RESPONDER                             │
+│                           (Review Service - 8016)                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    INPUT                    PROCESSING                    OUTPUT
+    ─────                    ──────────                    ──────
+
+┌──────────────┐        ┌────────────────┐         ┌────────────────┐
+│  Customer    │        │  Sentiment     │         │  Personalized  │
+│  Review      │───────▶│  Analysis      │────────▶│  Response      │
+│              │        │                │         │                │
+│ • Rating     │        │ • Positive     │         │ • Grateful     │
+│ • Text       │        │ • Neutral      │         │ • Apologetic   │
+│ • Platform   │        │ • Negative     │         │ • Solution     │
+│ • Reviewer   │        │                │         │ • Personal     │
+└──────────────┘        └────────┬───────┘         └────────┬───────┘
+                                 │                          │
+                        ┌────────▼────────┐        ┌────────▼────────┐
+                        │  AI Response    │        │  Approval       │
+                        │  Generator      │        │  Workflow       │
+                        │                 │        │                 │
+                        │ Tone-matched    │        │ • Review        │
+                        │ Empathetic      │        │ • Edit          │
+                        │ Specific        │        │ • Approve       │
+                        └─────────────────┘        │ • Auto-post     │
+                                                   └─────────────────┘
+
+INTEGRATION FLOW:
+1. Ingest Reviews → Google, Yelp, Facebook APIs (webhook or polling)
+2. Analyze Sentiment → Extract keywords, issues, compliments
+3. Generate Response → Context-aware, tone-matched AI response
+4. Approval → Human review and customization
+5. Post Response → Automated posting back to platform
+
+DATABASE TABLES:
+• customer_reviews (all reviews from all platforms)
+• ai_review_responses (generated responses)
+• review_platforms (API credentials & settings)
+• review_analytics (performance metrics)
+
+KEY FEATURES:
+✓ Multi-platform support (Google, Yelp, Facebook, Trustpilot)
+✓ Sentiment-based response templates
+✓ Batch response generation
+✓ Approval workflow
+✓ Auto-posting capability
+✓ Response time tracking
+✓ Performance analytics
+```
+
+## Feature #3: AI Social Media Content Calendar
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                  AI SOCIAL MEDIA CONTENT CALENDAR                           │
+│                         (Content Service - 8014)                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    INPUT                    PROCESSING                    OUTPUT
+    ─────                    ──────────                    ──────
+
+┌──────────────┐        ┌────────────────┐         ┌────────────────┐
+│  Business    │        │  Calendar      │         │  30-Day        │
+│  Context     │───────▶│  Generator     │────────▶│  Content Plan  │
+│              │        │                │         │                │
+│ • Industry   │        │ • Mix strategy │         │ • 20-30 posts  │
+│ • Voice      │        │ • Themes       │         │ • Hashtags     │
+│ • Audience   │        │ • Timing       │         │ • Images       │
+│ • Products   │        │ • Variety      │         │ • Schedule     │
+│ • Goals      │        │                │         │                │
+└──────────────┘        └────────┬───────┘         └────────┬───────┘
+                                 │                          │
+                        ┌────────▼────────┐        ┌────────▼────────┐
+                        │  Platform       │        │  Auto-Post      │
+                        │  Variations     │        │  Scheduler      │
+                        │                 │        │                 │
+                        │ • Instagram     │        │ Facebook API    │
+                        │ • Facebook      │        │ Instagram API   │
+                        │ • Twitter/X     │        │ LinkedIn API    │
+                        │ • LinkedIn      │        │ Twitter API     │
+                        └─────────────────┘        └─────────────────┘
+
+CONTENT MIX:
+40% Promotional  → Product features, offers, sales
+30% Educational  → Tips, how-tos, industry insights
+20% Engagement   → Questions, polls, user content
+10% Testimonial  → Reviews, success stories, UGC
+
+DATABASE TABLES:
+• content_calendars (monthly calendar metadata)
+• social_media_posts (individual posts with scheduling)
+• social_media_accounts (platform credentials)
+• post_templates (reusable content templates)
+• social_media_analytics (performance tracking)
+
+KEY FEATURES:
+✓ Month-long content calendar generation
+✓ Platform-specific variations
+✓ Optimal timing recommendations
+✓ Hashtag research & suggestions
+✓ Image prompt generation
+✓ Auto-scheduling
+✓ Performance analytics
+✓ Content recycling
+```
+
+## Shared Infrastructure
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         SHARED AI INFRASTRUCTURE                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                         LLM GATEWAY SERVICE                                 ┃
+┃                             (Port 8004)                                     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
+│   Prompt     │    │   Model      │    │    Token     │    │   Response   │
+│ Management   │    │   Router     │    │   Tracker    │    │    Cache     │
+└──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘
+       │                    │                    │                    │
+       │            ┌───────┼───────┐           │                    │
+       │            ▼       ▼       ▼           │                    │
+       │      ┌─────────────────────────┐       │                    │
+       └─────▶│  AI Provider APIs       │◀──────┴────────────────────┘
+              │                         │
+              │  • OpenAI GPT-4         │
+              │  • OpenAI GPT-3.5       │
+              │  • Anthropic Claude 3   │
+              │  • (Future: Local LLMs) │
+              └─────────────────────────┘
+
+CORE CAPABILITIES:
+┌─────────────────────────────────────────────────────────────────┐
+│ 1. Model Abstraction                                            │
+│    → Single API for multiple LLM providers                      │
+│    → Automatic failover between models                          │
+│    → Cost-based routing (use cheaper models when appropriate)   │
+│                                                                  │
+│ 2. Prompt Template Management                                   │
+│    → Centralized prompt library                                 │
+│    → Version control for prompts                                │
+│    → A/B testing different prompts                              │
+│                                                                  │
+│ 3. Token Usage Tracking                                         │
+│    → Per-site, per-feature tracking                             │
+│    → Cost calculation                                           │
+│    → Quota enforcement                                          │
+│    → Billing integration                                        │
+│                                                                  │
+│ 4. Response Caching                                             │
+│    → Cache identical prompts (Redis)                            │
+│    → Reduce API costs by 30-50%                                 │
+│    → Faster response times                                      │
+│                                                                  │
+│ 5. Rate Limiting & Queue                                        │
+│    → Respect API rate limits                                    │
+│    → Queue batch jobs                                           │
+│    → Priority-based processing                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Data Flow - Complete Example
+
+```
+EXAMPLE: Generate AI Product Description
+─────────────────────────────────────────
+
+Step 1: User Request
+┌─────────────────────────────────────────────────────────────┐
+│ POST /api/v1/catalog/{site_id}/products                    │
+│ {                                                           │
+│   "name": "Organic Green Tea 100g",                        │
+│   "category": "Beverages",                                 │
+│   "price": 299,                                            │
+│   "generate_description": true                             │
+│ }                                                           │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+Step 2: Storefront Service
+┌─────────────────────────────────────────────────────────────┐
+│ • Validate product data                                     │
+│ • Create product record in DB                              │
+│ • Fetch prompt template for "Beverages"                    │
+│ • Build AI generation request                              │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+Step 3: LLM Gateway
+┌─────────────────────────────────────────────────────────────┐
+│ • Check cache (Redis) for similar prompt                   │
+│ • Select model (GPT-4 for first-time, GPT-3.5 for retry)  │
+│ • Execute API call to OpenAI                               │
+│ • Parse JSON response                                      │
+│ • Track token usage (450 tokens = $0.027)                 │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+Step 4: OpenAI API
+┌─────────────────────────────────────────────────────────────┐
+│ Response:                                                   │
+│ {                                                           │
+│   "description": "Discover the pure essence of nature...", │
+│   "short_description": "Premium organic green tea...",     │
+│   "meta_title": "Organic Green Tea 100g | YourStore",     │
+│   "tags": ["organic", "tea", "health"]                    │
+│ }                                                           │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+Step 5: Save & Return
+┌─────────────────────────────────────────────────────────────┐
+│ • Save to ai_generated_descriptions table                  │
+│ • Update product.description field                         │
+│ • Record token usage in ai_token_usage table              │
+│ • Cache response for 7 days                                │
+│ • Return to client                                         │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+Step 6: Client Response
+┌─────────────────────────────────────────────────────────────┐
+│ {                                                           │
+│   "product_id": "uuid",                                    │
+│   "name": "Organic Green Tea 100g",                        │
+│   "description": "Discover the pure essence...",           │
+│   "ai_generated": true,                                    │
+│   "tokens_used": 450,                                      │
+│   "generation_time_ms": 1200                               │
+│ }                                                           │
+└─────────────────────────────────────────────────────────────┘
+
+Total Time: ~1.5 seconds
+Total Cost: $0.027
+Cache Duration: 7 days (if same product attributes)
+```
+
+## Pricing & Token Economics
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    TOKEN USAGE ESTIMATES                    │
+└─────────────────────────────────────────────────────────────┘
+
+Feature                      Avg Tokens    Cost/Request   Requests/Month   Monthly Cost
+─────────────────────────────────────────────────────────────────────────────────────────
+Product Description          400-600       $0.024-0.036   200              $6.00
+Review Response              150-250       $0.009-0.015   500              $6.00
+Social Media Post            100-200       $0.006-0.012   30               $0.27
+Social Calendar (30 posts)   3000-4000     $0.18-0.24     1                $0.21
+─────────────────────────────────────────────────────────────────────────────────────────
+                                                          TOTAL:           ~$12.50/month
+
+PRICING TIERS (with margin):
+─────────────────────────────────────────────────────────────────────────────────────────
+Free Tier:         10,000 tokens/month    ($0.60 cost)      Price: $0
+Starter:          100,000 tokens/month    ($6.00 cost)      Price: $29/month (5x margin)
+Professional:     500,000 tokens/month    ($30.00 cost)     Price: $99/month (3x margin)
+Enterprise:     1,000,000+ tokens/month   ($60+ cost)       Price: Custom
+
+REVENUE PROJECTION (1000 customers):
+─────────────────────────────────────────────────────────────────────────────────────────
+100 Free users:         $0
+600 Starter users:      $17,400/month
+250 Professional:       $24,750/month
+50 Enterprise ($299):   $14,950/month
+                        ─────────────────
+TOTAL MRR:              $57,100/month
+TOTAL ARR:              $685,200/year
+
+Cost of Goods (COGS):   ~$5,000/month (tokens)
+Gross Margin:           91%
+```
+
+---
+
+**This architecture is ready for implementation!** 🚀
+
+All diagrams can be imported into draw.io for visual editing.
+Next step: Begin coding Phase 1 - Foundation & LLM Gateway setup.
